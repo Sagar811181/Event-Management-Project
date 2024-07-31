@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1082982312894",
+    "project_id": "event-shadow",
+    "storage_bucket": "event-shadow.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1082982312894:android:d84ac997b5f8fcd06867ef",
+        "android_client_info": {
+          "package_name": "com.example.evnt_shadow"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1082982312894-ss8k749g2mq9gcluf9mv736lcn31358b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBliGX9JLuQdkU47NoA3n-CtaXjWKMfhVE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1082982312894-ss8k749g2mq9gcluf9mv736lcn31358b.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
