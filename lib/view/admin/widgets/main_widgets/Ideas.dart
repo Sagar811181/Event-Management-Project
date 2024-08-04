@@ -1,17 +1,16 @@
-import 'package:evnt_shadow/view/admin/widgets/list_page/catering_list.dart';
+import 'package:evnt_shadow/view/admin/widgets/list_page/idea_list.dart';
 import 'package:flutter/material.dart';
 
-class Manage_Catering extends StatelessWidget {
-  const Manage_Catering({
+class Manage_Idea extends StatelessWidget {
+  const Manage_Idea({
     super.key,
   });
 
-   
   Widget build(BuildContext context) {
     return InkWell(
         onTap: () {
           Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const Catering_List()));
+              MaterialPageRoute(builder: (context) =>  Idea_List()));
         },
         child: Center(
           child: Container(
@@ -21,14 +20,15 @@ class Manage_Catering extends StatelessWidget {
                 color: Color.fromARGB(255, 45, 44, 44),
                 borderRadius: BorderRadius.circular(12)),
             child: Center(
-              child: Column(mainAxisAlignment: MainAxisAlignment.center,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     "Mannage",
                     style: TextStyle(color: Colors.white, fontSize: 13),
                   ),
                   Text(
-                    "catering",
+                    "Ideas",
                     style: TextStyle(color: Colors.white, fontSize: 10),
                   ),
                 ],

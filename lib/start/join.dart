@@ -1,6 +1,8 @@
+import 'package:evnt_shadow/provider/authentication/google_authentication.dart';
 import 'package:evnt_shadow/view/admin/admin_hoamepage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 // ignore: camel_case_types
 class JoinUs extends StatelessWidget {
@@ -91,7 +93,7 @@ class JoinUs extends StatelessWidget {
                           child: GestureDetector(
                             onTap: () async {
                               {
-                                User? user = await signInWithGoogle();
+                                User? user = await Provider.of<AuthServies2>(context,listen: false).signInWithGoogle();
                                 print("------------$user");
                                 if (user != null) {
                                   if(user.uid == "inoljWaIoPagsSRleVElmYpr8Eu1"){
@@ -101,7 +103,7 @@ class JoinUs extends StatelessWidget {
                                         builder: (context) => Admins_home_page()),
                                   );
                                   }else{
-                                  loginsucesfully(context: context);
+                                  Provider.of<AuthServies2>(context,listen: false).loginsucesfully(context: context);
                                   }
                                 }
                               }

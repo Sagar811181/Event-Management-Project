@@ -1,9 +1,12 @@
-// ignore_for_file: unused_local_variable
+// ignore_for_file: unused_local_variable, unnecessary_null_comparison
+
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evnt_shadow/view/admin/costom_widgets/textfield.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-
+import 'package:image_picker/image_picker.dart';
 
 class Add_Hosting_Girl extends StatefulWidget {
   const Add_Hosting_Girl({super.key});
@@ -12,12 +15,23 @@ class Add_Hosting_Girl extends StatefulWidget {
 }
 
 class _Add_CatogaryState extends State<Add_Hosting_Girl> {
+  TextEditingController HostingGirlscontroller = TextEditingController();
+  TextEditingController HostingGirlWagescontroller = TextEditingController();
+  File? imageFile;
 
-      TextEditingController HostingGirlscontroller = TextEditingController();
-            TextEditingController HostingGirlWagescontroller = TextEditingController();
-                        TextEditingController HGirlBanquetWagescontroller = TextEditingController();
+  Future chooseImage() async {
+    ImagePicker picker = ImagePicker();
 
-
+    var PickedFile = await picker.pickImage(source: ImageSource.gallery);
+    imageFile = File(PickedFile!.path);
+    setState(() {
+      if (PickedFile != null) {
+        imageFile = File(PickedFile.path);
+      } else {
+        print("No Image Pickd");
+      }
+    });
+  }
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,29 +43,66 @@ class _Add_CatogaryState extends State<Add_Hosting_Girl> {
               SizedBox(
                 height: 40,
               ),
-              MyTextfield(hintText: 'Group Name', controller: HostingGirlscontroller),
-              MyTextfield(hintText: 'Wage/Day ₹', controller: HostingGirlWagescontroller),
-             MyTextfield(hintText: 'Banquet Wage/Day ₹', controller: HGirlBanquetWagescontroller),
-
-              
-            ElevatedButton(
+              Column(
+                children: [
+                  InkWell(
+                    onTap: () {
+                      chooseImage();
+                    },
+                    child: Container(
+                        height: 100,
+                        width: 100,
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey)),
+                        child: imageFile != null
+                            ? Image.file(
+                                imageFile!.absolute,
+                                fit: BoxFit.cover,
+                              )
+                            : Center(
+                                child: Icon(
+                                  Icons.add_a_photo_outlined,
+                                  color: Colors.grey,
+                                ),
+                              )),
+                  )
+                ],
+              ),
+              MyTextfield(
+                  hintText: 'Group Name', controller: HostingGirlscontroller),
+              MyTextfield(
+                  hintText: 'Wage/Day ₹',
+                  controller: HostingGirlWagescontroller),
+              ElevatedButton(
                   onPressed: () async {
-                     var teamData = {
-                      "Group_Name": HostingGirlscontroller.text,
-                      "Wage/": HostingGirlWagescontroller.text,
-                      "Banquet_price": HGirlBanquetWagescontroller.text,
-                    
-                    };
-                    var db_ref = await FirebaseFirestore.instance
-                        .collection("HostingGirls")
-                        .add(teamData);
-                    if (!context.mounted) return;
-                    Navigator.pop(context);
+                    try {
+                      var _storageref = await FirebaseStorage.instance
+                          .ref()
+                          .child('/HostingGirls/${imageFile!.path}')
+                          .putFile(imageFile!);
+                      var getImgUrl = await _storageref.ref.getDownloadURL();
+                      var teamData = {
+                        "Group_Name": HostingGirlscontroller.text,
+                        "Wages": HostingGirlWagescontroller.text,
+                        "image": getImgUrl,
+                      };
+                      var db_ref = await FirebaseFirestore.instance
+                          .collection("HostingGirls")
+                          .add(teamData);
+                      if (!context.mounted) return;
+                      Navigator.pop(context);
+                    } catch (e) {
+                      print("EXCEPTION --- $e");
+                    }
                   },
-                  child: Text("Submit",),
+                  child: Text(
+                    "Submit",
+                  ),
                   style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
-                    foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(Colors.green),
+                    foregroundColor:
+                        MaterialStateProperty.all<Color>(Colors.white),
                   ))
             ],
           ),
@@ -60,4 +111,3 @@ class _Add_CatogaryState extends State<Add_Hosting_Girl> {
     );
   }
 }
-

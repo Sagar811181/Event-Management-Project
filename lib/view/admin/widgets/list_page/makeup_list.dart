@@ -2,7 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evnt_shadow/view/admin/widgets/add_page/add_makeup.dart';
-import 'package:evnt_shadow/view/admin/widgets/editPages/Edit_catering_page.dart';
+import 'package:evnt_shadow/view/admin/widgets/editPages/edit_makeup.dart';
 import 'package:flutter/material.dart';
 
 class Makeup_list extends StatelessWidget {
@@ -14,7 +14,7 @@ class Makeup_list extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const Add_Makeup()));
+            MaterialPageRoute(builder: (context) => Add_Makeup()));
 
         },
         child: Icon(
@@ -31,7 +31,10 @@ class Makeup_list extends StatelessWidget {
           builder: (BuildContext context,
               AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const CircularProgressIndicator();
+              return Center(
+                  child: const CircularProgressIndicator(
+                color: Colors.green,
+              ));
             }
             if (snapshot.hasData) {
               return ListView.builder(
@@ -58,13 +61,55 @@ class Makeup_list extends StatelessWidget {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
-                                              data[index]["group_name"],
+                                              data[index]["Name"],
                                               style: TextStyle(
                                                   color: Colors.white,
                                                   fontSize: 20,
                                                   fontWeight: FontWeight.w800),
+                                            ),Container(
+                                              height: 80,
+                                              width: 80,
+                                              color: Colors.white,
+                                              child: data[index]["image"] == ""
+                                                  ? Icon(Icons.person)
+                                                  : Image(
+                                                      image: NetworkImage(
+                                                          data[index]["image"]),
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                            )
+                                            
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              "location : ",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold),
                                             ),
-                                            PopupMenuButton<String>(
+                                            Text(
+                                              data[index]["Location"],
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                          ],
+                                        ),
+                                        Row(children: [
+                                          Text(
+                                            "MakeUp/person : ",
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          Text(
+                                            data[index]["MakeUp_Price"],
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
+                                          Spacer(),
+                                          PopupMenuButton<String>(
                                               iconColor: Colors.white,
                                               onSelected: (String result) {
                                                 print(
@@ -93,7 +138,7 @@ class Makeup_list extends StatelessWidget {
                                                       context,
                                                       MaterialPageRoute(
                                                           builder: (context) =>
-                                                              Catering_Editpage(
+                                                              EditMakeup(
                                                                 docId:
                                                                     data[index]
                                                                         .id,
@@ -114,35 +159,6 @@ class Makeup_list extends StatelessWidget {
                                                 ),
                                               ],
                                             ),
-                                          ],
-                                        ),
-                                        Row(
-                                          children: [
-                                            Text(
-                                              "location : ",
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                            Text(
-                                              data[index]["location"],
-                                              style: TextStyle(
-                                                  color: Colors.white),
-                                            ),
-                                          ],
-                                        ),
-                                        Row(children: [
-                                          Text(
-                                            "MakeUp/person : ",
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          Text(
-                                            data[index]["MakeUp/person"],
-                                            style:
-                                                TextStyle(color: Colors.white),
-                                          )
                                         ])
                                       ])))));
                 },

@@ -1,16 +1,14 @@
-import 'package:evnt_shadow/view/admin/widgets/list_page/my_StoryList.dart';
+import 'package:evnt_shadow/view/admin/widgets/list_page/vedio_list.dart';
 import 'package:flutter/material.dart';
 
-class Mannage_Story extends StatelessWidget {
-   Mannage_Story({
-    super.key,
-  });
+class Vedio_Catogary extends StatelessWidget {
+  const Vedio_Catogary({super.key});
 
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => Story_List ()));
+            context, MaterialPageRoute(builder: (context) => Vedio_List()));
       },
       child: Center(
         child: Container(
@@ -24,11 +22,11 @@ class Mannage_Story extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "Add",
+                    "Mannage",
                     style: TextStyle(color: Colors.white, fontSize: 13),
                   ),
                   Text(
-                    "Story",
+                    "Vedios",
                     style: TextStyle(color: Colors.white, fontSize: 10),
                   ),
                 ],

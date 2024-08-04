@@ -8,31 +8,30 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-class Add_Mehandhi extends StatelessWidget {
-   Add_Mehandhi({super.key});
+class Add_Catering extends StatelessWidget {
+  Add_Catering({super.key});
 
-  TextEditingController Mehandhicontroller = TextEditingController();
+  TextEditingController IdeaNamecontroller = TextEditingController();
 
-  TextEditingController MehandhiPricecontroller = TextEditingController();
+  TextEditingController IdeaLocationcontroller = TextEditingController();
 
-  TextEditingController MehandhiLocationcontroller = TextEditingController();
-File? imageFile;
+  TextEditingController PerPersoncontroller = TextEditingController();
+
+  File? imageFile;
 
   Future chooseImage() async {
     ImagePicker picker = ImagePicker();
 
     var PickedFile = await picker.pickImage(source: ImageSource.gallery);
     imageFile = File(PickedFile!.path);
-    
-      if (PickedFile != null) {
-        imageFile = File(PickedFile.path);
-      } else {
-        print("No Image Pickd");
-      }
+
+    if (PickedFile != null) {
+      imageFile = File(PickedFile.path);
+    } else {
+      print("No Image Pickd");
     }
-    
-   
-  
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
@@ -43,8 +42,7 @@ File? imageFile;
               SizedBox(
                 height: 40,
               ),
-
-               Column(
+              Column(
                 children: [
                   InkWell(
                     onTap: () {
@@ -69,30 +67,29 @@ File? imageFile;
                   )
                 ],
               ),
-              MyTextfield(hintText: 'Name', controller: Mehandhicontroller),
               MyTextfield(
-                  hintText: 'Location', controller: MehandhiLocationcontroller),
+                  hintText: 'Group Name', controller: IdeaNamecontroller),
               MyTextfield(
-                  hintText: 'Mehandhi/Person ₹',
-                  controller: MehandhiPricecontroller),
-            ElevatedButton(
+                  hintText: 'Location', controller: IdeaLocationcontroller),
+              MyTextfield(
+                  hintText: 'Wages/Day ₹', controller: PerPersoncontroller),
+              ElevatedButton(
                   onPressed: () async {
-
-                     try {
+                    try {
                       var _storageref = await FirebaseStorage.instance
                           .ref()
-                          .child('/Mehandhi/${imageFile!.path}')
+                          .child('/Ideas/${imageFile!.path}')
                           .putFile(imageFile!);
                       var getImgUrl = await _storageref.ref.getDownloadURL();
+
                       var teamData = {
-                      "Name": Mehandhicontroller.text,
-                      "Location": MehandhiLocationcontroller.text,
-                      "Mehandhi_price": MehandhiPricecontroller.text,
-                      
-                     "image": getImgUrl,
+                        "group_name": IdeaNamecontroller.text,
+                        "location": IdeaLocationcontroller.text,
+                        "wages": PerPersoncontroller.text,
+                        "image": getImgUrl,
                       };
                       var db_ref = await FirebaseFirestore.instance
-                          .collection("Mehandhi")
+                          .collection("Ideas")
                           .add(teamData);
                       if (!context.mounted) return;
                       Navigator.pop(context);
@@ -100,17 +97,17 @@ File? imageFile;
                       print("EXCEPTION --- $e");
                     }
                   },
-                  child: Text("Submit",),
+                  child: Text("Submit"),
                   style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
-                    foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                  ))
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(Colors.green),
+                    foregroundColor:
+                        MaterialStateProperty.all<Color>(Colors.white),
+                  )),
             ],
           ),
         ),
       ),
     );
   }
-  
-  
 }

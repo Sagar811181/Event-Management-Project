@@ -1,7 +1,6 @@
 import 'package:evnt_shadow/view/user/widgets/Our_Mehanddhis.dart';
 import 'package:evnt_shadow/view/user/widgets/Our_veneus.dart';
 import 'package:evnt_shadow/view/user/widgets/home_screen_plan_widgets.dart';
-import 'package:evnt_shadow/view/user/widgets/our_bokka.dart';
 import 'package:evnt_shadow/view/user/widgets/our_cake.dart';
 import 'package:evnt_shadow/view/user/widgets/our_catering.dart';
 import 'package:evnt_shadow/view/user/widgets/our_dinningset.dart';
@@ -17,7 +16,6 @@ import 'package:flutter/material.dart';
 class Homepage extends StatelessWidget {
   Homepage({super.key});
 
-  
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -44,9 +42,9 @@ class Homepage extends StatelessWidget {
         ],
       ),
       backgroundColor: Colors.black,
-      body: Padding(
-        padding: EdgeInsets.all(15),
-        child: SingleChildScrollView(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -55,7 +53,19 @@ class Homepage extends StatelessWidget {
                 height: 25,
               ),
               Text(
-                "Our Wedding Veneus",
+                "Our Ideas",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: "ArchitectsDaughter",
+                    fontSize: 20,
+                    fontWeight: FontWeight.w100),
+              ),
+              Our_Ideas(),
+              SizedBox(
+                height: 40,
+              ),
+              Text(
+                "Our Venue",
                 style: TextStyle(
                     color: Colors.white,
                     fontFamily: "ArchitectsDaughter",
@@ -63,6 +73,18 @@ class Homepage extends StatelessWidget {
                     fontWeight: FontWeight.w100),
               ),
               Our_Wedding_Venues(),
+              SizedBox(
+                height: 40,
+              ),
+              Text(
+                "Our Wedding Dinning set",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: "ArchitectsDaughter",
+                    fontSize: 20,
+                    fontWeight: FontWeight.w100),
+              ),
+              our_dinningset(),
               SizedBox(
                 height: 40,
               ),
@@ -82,31 +104,7 @@ class Homepage extends StatelessWidget {
                 height: 40,
               ),
               Text(
-                "Our Wedding Dinning set",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: "ArchitectsDaughter",
-                    fontSize: 20,
-                    fontWeight: FontWeight.w100),
-              ),
-              our_dinningset(),
-              SizedBox(
-                height: 40,
-              ),
-              Text(
-                "Our Wedding Catering",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: "ArchitectsDaughter",
-                    fontSize: 20,
-                    fontWeight: FontWeight.w100),
-              ),
-              Our_catering(),
-              SizedBox(
-                height: 40,
-              ),
-              Text(
-                "Our Wedding Makeup",
+                "Our Makeup",
                 style: TextStyle(
                     color: Colors.white,
                     fontFamily: "ArchitectsDaughter",
@@ -118,7 +116,7 @@ class Homepage extends StatelessWidget {
                 height: 40,
               ),
               Text(
-                "Our Wedding Photography",
+                "Our Photography",
                 style: TextStyle(
                     color: Colors.white,
                     fontFamily: "ArchitectsDaughter",
@@ -185,21 +183,10 @@ class Homepage extends StatelessWidget {
                     fontSize: 20,
                     fontWeight: FontWeight.w100),
               ),
-              
-              
               Our_Wedding_cake(),
-               SizedBox(
-                height: 40,
+              SizedBox(
+                height: 20,
               ),
-              Text(
-                "Our Wedding Bokka",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: "ArchitectsDaughter",
-                    fontSize: 20,
-                    fontWeight: FontWeight.w100),
-              ),
-              Our_Wedding_bokka()
             ],
           ),
         ),

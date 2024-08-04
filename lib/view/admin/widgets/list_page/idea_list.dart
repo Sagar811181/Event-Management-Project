@@ -1,17 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:evnt_shadow/view/admin/widgets/add_page/add_catering.dart';
-import 'package:evnt_shadow/view/admin/widgets/editPages/Edit_catering_page.dart';
+import 'package:evnt_shadow/view/admin/widgets/add_page/add_ideas.dart';
+import 'package:evnt_shadow/view/admin/widgets/editPages/Edit_cateringpage.dart';
 import 'package:flutter/material.dart';
 
-class Catering_List extends StatelessWidget {
-  const Catering_List({super.key});
+class Idea_List extends StatelessWidget {
+   Idea_List({super.key});
 
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const Add_Catering()));
+              MaterialPageRoute(builder: (context) =>  Add_Catering()));
         },
         child: Icon(
           Icons.add,
@@ -23,7 +23,7 @@ class Catering_List extends StatelessWidget {
         // child: Center(child: Text("Test"),),
         child: StreamBuilder(
           stream:
-              FirebaseFirestore.instance.collection("CateringTeam").snapshots(),
+              FirebaseFirestore.instance.collection("Ideas").snapshots(),
           builder: (BuildContext context,
               AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
@@ -106,7 +106,7 @@ class Catering_List extends StatelessWidget {
                                           ),
                                           Spacer(),
                                           PopupMenuButton<String>(
-                                            iconColor: Colors.black,
+                                            iconColor: Colors.white,
                                             onSelected: (String result) {
                                               print(
                                                   result); // Handle your logic here
@@ -132,7 +132,7 @@ class Catering_List extends StatelessWidget {
                                                     context,
                                                     MaterialPageRoute(
                                                         builder: (context) =>
-                                                            Catering_Editpage(
+                                                            Idea_Editpage(
                                                               docId: data[index]
                                                                   .id,
                                                             )),

@@ -1,4 +1,4 @@
-import 'package:evnt_shadow/view/user/widgets/deatails_page.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class Our_Wedding_Venues extends StatelessWidget {
@@ -6,83 +6,106 @@ class Our_Wedding_Venues extends StatelessWidget {
     super.key,
   });
 
-  
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      padding: const EdgeInsets.all(8.0),
-      child: Row(
-        children: [
-          Stack(
-            children: [
-              Container(
-                height: 170,
-                width: 130,
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage(
-                        'assets/images/veneu/venues (6).jpeg',
-                      ),
-                      fit: BoxFit.cover,
-                    ),
-                    borderRadius: BorderRadius.all(Radius.circular(12))),
-                child: Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Colors.transparent,
-                        Colors.transparent,
-                        Colors.black,
-                      ],
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                    ),
-                  ),
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => Details_page(),
-                          //input the page
+    return Center(
+      child: StreamBuilder(
+        stream:
+            FirebaseFirestore.instance.collection("Venue").snapshots(),
+        builder: (BuildContext context,
+            AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CircularProgressIndicator();
+          }
+          if (snapshot.hasData) {
+            return SizedBox(
+              height: 200,
+              width: MediaQuery.sizeOf(context).width * .9,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: snapshot.data!.docs.length,
+                itemBuilder: (context, index) {
+                  var data = snapshot.data!;
+
+                  return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Stack(children: [
+                        Container(
+                          height: 170,
+                          width: 130,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: NetworkImage(
+                                data.docs[index]["image"],
+                              ),
+                              fit: BoxFit.cover,
+                            ),
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [
+                                  Colors.transparent,
+                                  Colors.transparent,
+                                  Colors.black,
+                                ],
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                              ),
+                            ),
+                            child: GestureDetector(
+                              onTap: () {
+                                // Navigator.push(
+                                //   context,
+                                //   MaterialPageRoute(
+                                //       builder: (context) => JoinUs()
+                                //       //input the page
+                                //       ),
+                                // );
+                              },
+                            ),
+                          ),
                         ),
-                      );
-                    },
-                  ),
-                ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                height: 120,
+                              ),
+                              Text(
+                                "${data.docs[index]["Venue_Name"]}",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: "ArchitectsDaughter",
+                                  fontSize: 12,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 3,
+                              ),
+                              Text(
+                                "₹ ${data.docs[index]["Indoor_Price"]}",
+                                style: TextStyle(
+                                    color: Colors.green,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ]));
+                },
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      height: 120,
-                    ),
-                    Text(
-                      "Jalsa Avenue",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: "ArchitectsDaughter",
-                        fontSize: 12,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 3,
-                    ),
-                    Text(
-                      "₹ 60000",
-                      style: TextStyle(
-                          color: Colors.green,
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold),
-                    )
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ],
+            );
+          } else {
+            return Text(
+              "Bo Dta Found",
+              style: TextStyle(color: Colors.white),
+            );
+          }
+        },
       ),
     );
   }

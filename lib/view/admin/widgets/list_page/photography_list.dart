@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evnt_shadow/view/admin/widgets/add_page/add_photography.dart';
-import 'package:evnt_shadow/view/admin/widgets/editPages/Edit_catering_page.dart';
+import 'package:evnt_shadow/view/admin/widgets/editPages/edit_photogrphy.dart';
 import 'package:flutter/material.dart';
 class Photography_List extends StatelessWidget {
   const Photography_List({super.key});
@@ -11,7 +11,7 @@ class Photography_List extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const Add_Photography()));
+            MaterialPageRoute(builder: (context) => Add_Photography()));
 
         },
         child: Icon(
@@ -28,7 +28,10 @@ class Photography_List extends StatelessWidget {
           builder: (BuildContext context,
               AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const CircularProgressIndicator();
+              return Center(
+                  child: const CircularProgressIndicator(
+                color: Colors.green,
+              ));
             }
             if (snapshot.hasData) {
               return ListView.builder(
@@ -55,13 +58,56 @@ class Photography_List extends StatelessWidget {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
-                                              data[index]["group_name"],
+                                              data[index]["Name"],
                                               style: TextStyle(
                                                   color: Colors.white,
                                                   fontSize: 20,
                                                   fontWeight: FontWeight.w800),
                                             ),
-                                            PopupMenuButton<String>(
+                                            Container(
+                                              height: 80,
+                                              width: 80,
+                                              color: Colors.white,
+                                              child: data[index]["image"] == ""
+                                                  ? Icon(Icons.person)
+                                                  : Image(
+                                                      image: NetworkImage(
+                                                          data[index]["image"]),
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                            ),
+                                           
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              "Location : ",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            Text(
+                                              data[index]["Location"],
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                          ],
+                                        ),
+                                       
+                                        Row(children: [
+                                          Text(
+                                            "Wedding Photos ₹: ",
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          Text(
+                                            data[index]["Wedding_Photos"],
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),Spacer(),
+                                           PopupMenuButton<String>(
                                               iconColor: Colors.white,
                                               onSelected: (String result) {
                                                 print(
@@ -90,7 +136,7 @@ class Photography_List extends StatelessWidget {
                                                       context,
                                                       MaterialPageRoute(
                                                           builder: (context) =>
-                                                              Catering_Editpage(
+                                                              EditPhotography(
                                                                 docId:
                                                                     data[index]
                                                                         .id,
@@ -111,62 +157,8 @@ class Photography_List extends StatelessWidget {
                                                 ),
                                               ],
                                             ),
-                                          ],
-                                        ),
-                                        Row(
-                                          children: [
-                                            Text(
-                                              "location : ",
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                            Text(
-                                              data[index]["location"],
-                                              style: TextStyle(
-                                                  color: Colors.white),
-                                            ),
-                                          ],
-                                        ),
-                                        Row(children: [
-                                          Text(
-                                            "Save The Date ₹: ",
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          Text(
-                                            data[index]["Save The Date ₹"],
-                                            style:
-                                                TextStyle(color: Colors.white),
-                                          )
                                         ]),
-                                        Row(children: [
-                                          Text(
-                                            "Wedding Photos ₹: ",
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          Text(
-                                            data[index]["Wedding Photos ₹"],
-                                            style:
-                                                TextStyle(color: Colors.white),
-                                          )
-                                        ]),
-                                        Row(children: [
-                                          Text(
-                                            "Album & Wedding Photos ₹: ",
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          Text(
-                                            data[index]["Album & Wedding Photos ₹"],
-                                            style:
-                                                TextStyle(color: Colors.white),
-                                          )
-                                        ]),
+                                       
                                       ])))));
                 },
               );

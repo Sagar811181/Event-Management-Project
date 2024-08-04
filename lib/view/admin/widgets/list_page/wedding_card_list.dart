@@ -2,7 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evnt_shadow/view/admin/widgets/add_page/add_wedding_card.dart';
-import 'package:evnt_shadow/view/admin/widgets/editPages/Edit_catering_page.dart';
+import 'package:evnt_shadow/view/admin/widgets/editPages/edit_card.dart';
 import 'package:flutter/material.dart';
 class Card_list extends StatelessWidget {
   const Card_list({super.key});
@@ -13,10 +13,10 @@ class Card_list extends StatelessWidget {
      Scaffold(floatingActionButton: FloatingActionButton(onPressed: (){
 
       Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const Add_Card()));
+            MaterialPageRoute(builder: (context) =>  Add_Card()));
 
      },child: 
-     Icon(Icons.add),),
+     Icon(Icons.add,color: Colors.green,),),
     body: Padding(
         padding: const EdgeInsets.all(10),
         child: StreamBuilder(
@@ -25,7 +25,10 @@ class Card_list extends StatelessWidget {
           builder: (BuildContext context,
               AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const CircularProgressIndicator();
+             return Center(
+                  child: const CircularProgressIndicator(
+                color: Colors.green,
+              ));
             }
             if (snapshot.hasData) {
               return ListView.builder(
@@ -52,13 +55,40 @@ class Card_list extends StatelessWidget {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
-                                              data[index]["group_name"],
+                                              data[index]["Card_Name"],
                                               style: TextStyle(
                                                   color: Colors.white,
                                                   fontSize: 20,
                                                   fontWeight: FontWeight.w800),
-                                            ),
-                                            PopupMenuButton<String>(
+                                            ),Container(
+                                              height: 80,
+                                              width: 80,
+                                              color: Colors.white,
+                                              child: data[index]["image"] == ""
+                                                  ? Icon(Icons.person)
+                                                  : Image(
+                                                      image: NetworkImage(
+                                                          data[index]["image"]),
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                            )
+                                            
+                                          ],
+                                        ),
+                                        
+                                        Row(children: [
+                                          Text(
+                                            "Price/Card ₹",
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          Text(
+                                            data[index]["Price_Card"],
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
+                                          Spacer(),PopupMenuButton<String>(
                                               iconColor: Colors.white,
                                               onSelected: (String result) {
                                                 print(
@@ -87,7 +117,7 @@ class Card_list extends StatelessWidget {
                                                       context,
                                                       MaterialPageRoute(
                                                           builder: (context) =>
-                                                              Catering_Editpage(
+                                                              EditCard(
                                                                 docId:
                                                                     data[index]
                                                                         .id,
@@ -108,21 +138,6 @@ class Card_list extends StatelessWidget {
                                                 ),
                                               ],
                                             ),
-                                          ],
-                                        ),
-                                        
-                                        Row(children: [
-                                          Text(
-                                            "Price/Card ₹",
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          Text(
-                                            data[index]["Price/Card ₹"],
-                                            style:
-                                                TextStyle(color: Colors.white),
-                                          )
                                         ])
                                       ])))));
                 },

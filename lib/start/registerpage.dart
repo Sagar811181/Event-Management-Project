@@ -296,7 +296,7 @@ class RegisterPage extends StatelessWidget {
                                           child: IconButton(
                                             onPressed: () async {
                                               User? user =
-                                                  await signInWithGoogle();
+                                                  await Provider.of<AuthServies2>(context,listen: false).signInWithGoogle();
                                               print("------------$user");
                                               if (user != null) {
                                                 Navigator.pushReplacement(

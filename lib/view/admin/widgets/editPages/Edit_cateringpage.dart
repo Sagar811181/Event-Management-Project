@@ -4,12 +4,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evnt_shadow/view/admin/costom_widgets/textfield.dart';
 import 'package:flutter/material.dart';
 
-class Catering_Editpage extends StatelessWidget {
-  TextEditingController CateringNameEditcontroller = TextEditingController();
-  TextEditingController CateringLocationEditcontroller = TextEditingController();
-  TextEditingController PerPersonEditcontroller = TextEditingController();
+class Idea_Editpage extends StatelessWidget {
+  TextEditingController IdeaNameEditcontroller = TextEditingController();
+  TextEditingController IdeaLocationEditcontroller = TextEditingController();
+  TextEditingController IdeaEditcontroller = TextEditingController();
 
-  Catering_Editpage({super.key, required this.docId});
+  Idea_Editpage({super.key, required this.docId});
 
   final String docId;
 
@@ -27,9 +27,9 @@ class Catering_Editpage extends StatelessWidget {
           }
 
           if (snapshot.hasData) {
-            CateringNameEditcontroller.text = snapshot.data!["group_name"];
-            CateringLocationEditcontroller.text = snapshot.data!["location"];
-            PerPersonEditcontroller.text = snapshot.data!["wages"];
+            IdeaNameEditcontroller.text = snapshot.data!["group_name"];
+            IdeaLocationEditcontroller.text = snapshot.data!["location"];
+            IdeaEditcontroller.text = snapshot.data!["wages"];
             return SingleChildScrollView(
               child: Column(
                 children: [
@@ -38,19 +38,19 @@ class Catering_Editpage extends StatelessWidget {
                   ),
                   MyTextfield(
                       hintText: 'Group Name',
-                      controller: CateringNameEditcontroller),
+                      controller: IdeaNameEditcontroller),
                   MyTextfield(
                       hintText: 'Location',
-                      controller: CateringLocationEditcontroller),
+                      controller: IdeaLocationEditcontroller),
                   MyTextfield(
                       hintText: 'Wages/Day ₹',
-                      controller: PerPersonEditcontroller),
+                      controller: IdeaEditcontroller),
                   ElevatedButton(
                       onPressed: () async {
                         var teamData = {
-                          "group_name": CateringNameEditcontroller.text,
-                          "location": CateringLocationEditcontroller.text,
-                          "wages": PerPersonEditcontroller.text,
+                          "group_name": IdeaNameEditcontroller.text,
+                          "location": IdeaLocationEditcontroller.text,
+                          "wages": IdeaEditcontroller.text,
                         };
                         var db_ref = await FirebaseFirestore.instance
                             .collection("CateringTeam")

@@ -1,30 +1,34 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evnt_shadow/view/admin/widgets/add_page/add_wedding_bouquet.dart';
-import 'package:evnt_shadow/view/admin/widgets/editPages/Edit_catering_page.dart';
+import 'package:evnt_shadow/view/admin/widgets/editPages/edit_boquate.dart';
 import 'package:flutter/material.dart';
+
 class Bokka_list extends StatelessWidget {
   const Bokka_list({super.key});
 
-  
   Widget build(BuildContext context) {
-    return 
-     Scaffold(floatingActionButton: FloatingActionButton(onPressed: (){
-
-      Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const Add_bouqueta()));
-
-     },child: 
-     Icon(Icons.add),),
+    return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => Add_bouqueta()));
+        },
+        child: Icon(
+          Icons.add,
+          color: Colors.green,
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(10),
         child: StreamBuilder(
-          stream:
-              FirebaseFirestore.instance.collection("Boquate").snapshots(),
+          stream: FirebaseFirestore.instance.collection("Boquate").snapshots(),
           builder: (BuildContext context,
               AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const CircularProgressIndicator();
+              return Center(
+                  child: const CircularProgressIndicator(
+                color: Colors.green,
+              ));
             }
             if (snapshot.hasData) {
               return ListView.builder(
@@ -47,16 +51,34 @@ class Bokka_list extends StatelessWidget {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
                                           children: [
+                                            Container(
+                                              height: 80,
+                                              width: 80,
+                                              color: Colors.white,
+                                              child: data[index]["image"] == ""
+                                                  ? Icon(Icons.person)
+                                                  : Image(
+                                                      image: NetworkImage(
+                                                          data[index]["image"]),
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                            ),
+                                            SizedBox(
+                                              width: 20,
+                                            ),
                                             Text(
-                                              data[index]["Bouquet Name"],
+                                              "Price : ",
                                               style: TextStyle(
                                                   color: Colors.white,
-                                                  fontSize: 20,
-                                                  fontWeight: FontWeight.w800),
+                                                  fontWeight: FontWeight.bold),
                                             ),
+                                            Text(
+                                              data[index]["Price"],
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                            Spacer(),
                                             PopupMenuButton<String>(
                                               iconColor: Colors.white,
                                               onSelected: (String result) {
@@ -69,8 +91,7 @@ class Bokka_list extends StatelessWidget {
                                                     'DeleteField') {
                                                   // Logic for delete button click
                                                   FirebaseFirestore.instance
-                                                      .collection(
-                                                          "Boquate")
+                                                      .collection("Boquate")
                                                       .doc(data[index].id)
                                                       .delete();
                                                   print(
@@ -86,7 +107,7 @@ class Bokka_list extends StatelessWidget {
                                                       context,
                                                       MaterialPageRoute(
                                                           builder: (context) =>
-                                                              Catering_Editpage(
+                                                              EditBoquate(
                                                                 docId:
                                                                     data[index]
                                                                         .id,
@@ -109,34 +130,6 @@ class Bokka_list extends StatelessWidget {
                                             ),
                                           ],
                                         ),
-                                        Row(
-                                          children: [
-                                            Text(
-                                              "location : ",
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                            Text(
-                                              data[index]["location"],
-                                              style: TextStyle(
-                                                  color: Colors.white),
-                                            ),
-                                          ],
-                                        ),
-                                        Row(children: [
-                                          Text(
-                                            "Price/Bouquet ₹ : ",
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          Text(
-                                            data[index]["Price/Bouquet ₹"],
-                                            style:
-                                                TextStyle(color: Colors.white),
-                                          )
-                                        ])
                                       ])))));
                 },
               );

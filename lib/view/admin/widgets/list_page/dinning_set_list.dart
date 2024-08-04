@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evnt_shadow/view/admin/widgets/add_page/add_dinning_set.dart';
-import 'package:evnt_shadow/view/admin/widgets/editPages/Edit_catering_page.dart';
+import 'package:evnt_shadow/view/admin/widgets/editPages/edit_dinning.dart';
 import 'package:flutter/material.dart';
 
 class Dinning_List extends StatelessWidget {
@@ -11,7 +11,7 @@ class Dinning_List extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const Add_Dinningset()));
+              MaterialPageRoute(builder: (context) =>  Add_Dinningset()));
         },
         child: Icon(
           Icons.add,
@@ -26,7 +26,10 @@ class Dinning_List extends StatelessWidget {
           builder: (BuildContext context,
               AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const CircularProgressIndicator();
+              return Center(
+                  child: const CircularProgressIndicator(
+                color: Colors.green,
+              ));
             }
             if (snapshot.hasData) {
               return ListView.builder(
@@ -144,7 +147,7 @@ class Dinning_List extends StatelessWidget {
                                                     context,
                                                     MaterialPageRoute(
                                                         builder: (context) =>
-                                                            Catering_Editpage(
+                                                            EditDinning(
                                                               docId: data[index]
                                                                   .id,
                                                             )),

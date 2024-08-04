@@ -2,7 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evnt_shadow/view/admin/widgets/add_page/add_wedding_cake.dart';
-import 'package:evnt_shadow/view/admin/widgets/editPages/Edit_catering_page.dart';
+import 'package:evnt_shadow/view/admin/widgets/editPages/edit_cake.dart';
 import 'package:flutter/material.dart';
 class Cake_list extends StatelessWidget {
   const Cake_list({super.key});
@@ -13,10 +13,10 @@ class Cake_list extends StatelessWidget {
      Scaffold(floatingActionButton: FloatingActionButton(onPressed: (){
 
       Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const Add_Cake()));
+            MaterialPageRoute(builder: (context) => Add_Cake()));
 
      },child: 
-     Icon(Icons.add),),
+     Icon(Icons.add,color: Colors.green,)),
     body: Padding(
         padding: const EdgeInsets.all(10),
         child: StreamBuilder(
@@ -25,7 +25,10 @@ class Cake_list extends StatelessWidget {
           builder: (BuildContext context,
               AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const CircularProgressIndicator();
+              return Center(
+                  child: const CircularProgressIndicator(
+                color: Colors.green,
+              ));
             }
             if (snapshot.hasData) {
               return ListView.builder(
@@ -52,13 +55,54 @@ class Cake_list extends StatelessWidget {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
-                                              data[index]["group_name"],
+                                              data[index]["Cake_Name"],
                                               style: TextStyle(
                                                   color: Colors.white,
                                                   fontSize: 20,
                                                   fontWeight: FontWeight.w800),
+                                            ),Container(
+                                              height: 80,
+                                              width: 80,
+                                              color: Colors.white,
+                                              child: data[index]["image"] == ""
+                                                  ? Icon(Icons.person)
+                                                  : Image(
+                                                      image: NetworkImage(
+                                                          data[index]["image"]),
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                            )
+                                            
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              "Location : ",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold),
                                             ),
-                                            PopupMenuButton<String>(
+                                            Text(
+                                              data[index]["Location"],
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                          ],
+                                        ),
+                                        Row(children: [
+                                          Text(
+                                            "Price/Cake ₹ : ",
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          Text(
+                                            data[index]["Price"],
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
+                                          Spacer(),PopupMenuButton<String>(
                                               iconColor: Colors.white,
                                               onSelected: (String result) {
                                                 print(
@@ -87,7 +131,7 @@ class Cake_list extends StatelessWidget {
                                                       context,
                                                       MaterialPageRoute(
                                                           builder: (context) =>
-                                                              Catering_Editpage(
+                                                              EditCake(
                                                                 docId:
                                                                     data[index]
                                                                         .id,
@@ -108,35 +152,6 @@ class Cake_list extends StatelessWidget {
                                                 ),
                                               ],
                                             ),
-                                          ],
-                                        ),
-                                        Row(
-                                          children: [
-                                            Text(
-                                              "Location : ",
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                            Text(
-                                              data[index]["location"],
-                                              style: TextStyle(
-                                                  color: Colors.white),
-                                            ),
-                                          ],
-                                        ),
-                                        Row(children: [
-                                          Text(
-                                            "Price/Cake ₹ : ",
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          Text(
-                                            data[index]["Price/Cake ₹"],
-                                            style:
-                                                TextStyle(color: Colors.white),
-                                          )
                                         ])
                                       ])))));
                 },

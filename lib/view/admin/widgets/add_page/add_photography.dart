@@ -1,26 +1,39 @@
-// ignore_for_file: unused_local_variable
+// ignore_for_file: unused_local_variable, unnecessary_null_comparison, must_be_immutable
+
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evnt_shadow/view/admin/costom_widgets/textfield.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
-class Add_Photography extends StatefulWidget {
-  const Add_Photography({super.key});
+class Add_Photography extends StatelessWidget {
+  Add_Photography({super.key});
 
-  State<Add_Photography> createState() => _Add_CatogaryState();
-}
+  TextEditingController Photographeycontroller = TextEditingController();
 
-class _Add_CatogaryState extends State<Add_Photography> { 
-      TextEditingController Photographeycontroller = TextEditingController();
-            TextEditingController PhotographeyLocationcontroller = TextEditingController();
+  TextEditingController PhotographeyLocationcontroller =
+      TextEditingController();
 
-            TextEditingController Albumcontroller = TextEditingController();
-      TextEditingController SaveTheDatecontroller = TextEditingController();
+  TextEditingController WeddingPicscontroller = TextEditingController();
 
-      TextEditingController WeddingPicscontroller = TextEditingController();
+  File? imageFile;
 
+  Future chooseImage() async {
+    ImagePicker picker = ImagePicker();
 
-   Widget build(BuildContext context) {
+    var PickedFile = await picker.pickImage(source: ImageSource.gallery);
+    imageFile = File(PickedFile!.path);
+
+    if (PickedFile != null) {
+      imageFile = File(PickedFile.path);
+    } else {
+      print("No Image Pickd");
+    }
+  }
+
+  Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(10),
@@ -30,34 +43,69 @@ class _Add_CatogaryState extends State<Add_Photography> {
               SizedBox(
                 height: 40,
               ),
-               MyTextfield(hintText: 'Name', controller: Photographeycontroller),
-              MyTextfield(hintText: 'Location', controller: PhotographeyLocationcontroller),
-              MyTextfield(hintText: 'Save The Date ₹', controller: SaveTheDatecontroller),
-             MyTextfield(hintText: 'Wedding Photos ₹ ', controller: WeddingPicscontroller),
-              MyTextfield(hintText: 'Album & Wedding Photos ₹', controller: Albumcontroller),
-
-
-              
-            ElevatedButton(
+              Column(
+                children: [
+                  InkWell(
+                    onTap: () {
+                      chooseImage();
+                    },
+                    child: Container(
+                        height: 100,
+                        width: 100,
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey)),
+                        child: imageFile != null
+                            ? Image.file(
+                                imageFile!.absolute,
+                                fit: BoxFit.cover,
+                              )
+                            : Center(
+                                child: Icon(
+                                  Icons.add_a_photo_outlined,
+                                  color: Colors.grey,
+                                ),
+                              )),
+                  )
+                ],
+              ),
+              MyTextfield(hintText:'Name', controller: Photographeycontroller),
+              MyTextfield(
+                  hintText:'Location',
+                  controller: PhotographeyLocationcontroller),
+              MyTextfield(
+                  hintText:'Wedding Photos ₹ ',
+                  controller: WeddingPicscontroller),
+              ElevatedButton(
                   onPressed: () async {
-                    var teamData = {
-                      "Name": Photographeycontroller.text,
-                      "Location": PhotographeyLocationcontroller.text,
-                      "Save_The_Date": SaveTheDatecontroller.text,
-                      "Wedding_Photos": WeddingPicscontroller.text,
-                      "Album_Wedding_Photos": Albumcontroller.text,
-                      
-                    };
-                    var db_ref = await FirebaseFirestore.instance
-                        .collection("Photography")
-                        .add(teamData);
-                    if (!context.mounted) return;
-                    Navigator.pop(context);
+                    try {
+                      var _storageref = await FirebaseStorage.instance
+                          .ref()
+                          .child('/Photography/${imageFile!.path}')
+                          .putFile(imageFile!);
+                      var getImgUrl = await _storageref.ref.getDownloadURL();
+                      var teamData = {
+                        "Name": Photographeycontroller.text,
+                        "Location": PhotographeyLocationcontroller.text,
+                        "Wedding_Photos": WeddingPicscontroller.text,
+                        "image": getImgUrl,
+                      };
+                      var db_ref = await FirebaseFirestore.instance
+                          .collection("Photography")
+                          .add(teamData);
+                      if (!context.mounted) return;
+                      Navigator.pop(context);
+                    } catch (e) {
+                      print("EXCEPTION --- $e");
+                    }
                   },
-                  child: Text("Submit",),
+                  child: Text(
+                    "Submit",
+                  ),
                   style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
-                    foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(Colors.green),
+                    foregroundColor:
+                        MaterialStateProperty.all<Color>(Colors.white),
                   ))
             ],
           ),
@@ -66,4 +114,3 @@ class _Add_CatogaryState extends State<Add_Photography> {
     );
   }
 }
-

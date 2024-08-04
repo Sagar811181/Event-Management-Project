@@ -1,6 +1,5 @@
 import 'package:evnt_shadow/provider/authentication/authentication.dart';
 import 'package:evnt_shadow/provider/authentication/google_authentication.dart';
-import 'package:evnt_shadow/provider/google_authentication.dart';
 import 'package:evnt_shadow/provider/registercoltroller.dart';
 import 'package:evnt_shadow/provider/signupcontroller.dart';
 import 'package:evnt_shadow/provider/user/home/home_provider.dart';
@@ -33,7 +32,7 @@ class MyApp extends StatelessWidget {
         //   create: (context) => PickedImage(),
         // ),
         ChangeNotifierProvider(
-          create: (context) => AuthServies(),
+          create: (context) => AuthServies2(),
         ),
         ChangeNotifierProvider(
           create: (context) => AuthServies2(),

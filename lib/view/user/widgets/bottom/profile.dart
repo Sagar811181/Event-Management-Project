@@ -1,5 +1,6 @@
+// ignore_for_file: unused_local_variable
+
 import 'package:evnt_shadow/provider/authentication/google_authentication.dart';
-import 'package:evnt_shadow/start/join.dart';
 import 'package:evnt_shadow/start/signinpage.dart';
 import 'package:evnt_shadow/view/user/widgets/Allabout.dart';
 import 'package:evnt_shadow/view/user/widgets/bottom/favorate.dart';
@@ -330,21 +331,21 @@ class Profilepage extends StatelessWidget {
                     },
                     child: InkWell(
                       onTap: () async {
-                        var lg = await Provider.of<AuthServies>(context,
+                        var lg = await Provider.of<AuthServies2>(context,
                                 listen: false)
-                            .signOutWithGoogle();
-                        if (lg) {
-                          showDialog(
-                              context: context,
-                              builder: (context) {
-                                return Center(
-                                    child: CircularProgressIndicator());
-                              });
+                            .signOutWithGoogle(context);
+                        // if (lg) {
+                        //   showDialog(
+                        //       context: context,
+                        //       builder: (context) {
+                        //         return Center(
+                        //             child: CircularProgressIndicator());
+                        //       });
 
-                          Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(builder: (context) => JoinUs()),
-                          );
-                        }
+                        //   Navigator.of(context).pushReplacement(
+                        //     MaterialPageRoute(builder: (context) => JoinUs()),
+                        //   );
+                        // }
                       },
                       child: Container(
                           width: 330,

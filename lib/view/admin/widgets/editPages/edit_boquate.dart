@@ -5,22 +5,16 @@ import 'package:evnt_shadow/view/admin/costom_widgets/textfield.dart';
 import 'package:flutter/material.dart';
 
 class EditBoquate extends StatelessWidget {
+  TextEditingController EditBoquatePricecontroller = TextEditingController();
 
+  EditBoquate({super.key, required this.docId});
+  final String docId;
 
-    TextEditingController EditBoquateNamecontroller = TextEditingController();
-    TextEditingController EditBoquateLocationcontroller = TextEditingController();
-    TextEditingController EditBoquatePricecontroller = TextEditingController();
-
-
-   EditBoquate({super.key , required this.docId});
- final String docId;
-  
   Widget build(BuildContext context) {
-    return  Scaffold(body: FutureBuilder(
-        future: FirebaseFirestore.instance
-            .collection("Boquate")
-            .doc(docId)
-            .get(),
+    return Scaffold(
+      body: FutureBuilder(
+        future:
+            FirebaseFirestore.instance.collection("Boquate").doc(docId).get(),
         builder: (BuildContext context,
             AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -28,9 +22,8 @@ class EditBoquate extends StatelessWidget {
           }
 
           if (snapshot.hasData) {
-            EditBoquateNamecontroller.text = snapshot.data!["Bouquet_Name"];
-            EditBoquateLocationcontroller.text = snapshot.data!["Location"];
-            EditBoquatePricecontroller.text = snapshot.data!["Bouquet_price"];
+            EditBoquatePricecontroller.text = snapshot.data!["Price"];
+
             return SingleChildScrollView(
               child: Column(
                 children: [
@@ -38,20 +31,12 @@ class EditBoquate extends StatelessWidget {
                     height: 40,
                   ),
                   MyTextfield(
-                      hintText: 'Group Name',
-                      controller: EditBoquateNamecontroller),
-                  MyTextfield(
-                      hintText: 'Location',
-                      controller: EditBoquateLocationcontroller),
-                  MyTextfield(
-                      hintText: 'Bouquet_price',
+                      hintText: 'Bouquet price',
                       controller: EditBoquatePricecontroller),
                   ElevatedButton(
                       onPressed: () async {
                         var teamData = {
-                          "group_name": EditBoquateNamecontroller.text,
-                          "location": EditBoquateLocationcontroller.text,
-                          "wages": EditBoquatePricecontroller.text,
+                          "Price": EditBoquatePricecontroller.text,
                         };
                         var db_ref = await FirebaseFirestore.instance
                             .collection("Boquate")
@@ -59,9 +44,7 @@ class EditBoquate extends StatelessWidget {
                             .update(teamData);
                         if (!context.mounted) return;
                         Navigator.pop(context);
-                        
                       },
-                      
                       child: Text("Update"),
                       style: ButtonStyle(
                         backgroundColor:

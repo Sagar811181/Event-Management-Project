@@ -1,7 +1,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evnt_shadow/view/admin/widgets/add_page/add_hosting_girls.dart';
-import 'package:evnt_shadow/view/admin/widgets/editPages/Edit_catering_page.dart';
+import 'package:evnt_shadow/view/admin/widgets/editPages/edit_hostingGirls.dart';
 import 'package:flutter/material.dart';
 
 class Hosting_Girls_list extends StatelessWidget {
@@ -30,7 +30,10 @@ class Hosting_Girls_list extends StatelessWidget {
           builder: (BuildContext context,
               AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const CircularProgressIndicator();
+             return Center(
+                  child: const CircularProgressIndicator(
+                color: Colors.green,
+              ));
             }
             if (snapshot.hasData) {
               return ListView.builder(
@@ -57,13 +60,40 @@ class Hosting_Girls_list extends StatelessWidget {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
-                                              data[index]["group_name"],
+                                              data[index]["Group_Name"],
                                               style: TextStyle(
                                                   color: Colors.white,
                                                   fontSize: 20,
                                                   fontWeight: FontWeight.w800),
+                                            ),Container(
+                                              height: 80,
+                                              width: 80,
+                                              color: Colors.white,
+                                              child: data[index]["image"] == ""
+                                                  ? Icon(Icons.person)
+                                                  : Image(
+                                                      image: NetworkImage(
+                                                          data[index]["image"]),
+                                                      fit: BoxFit.cover,
+                                                    ),
                                             ),
-                                            PopupMenuButton<String>(
+                                            
+                                          ],
+                                        ),
+                                       
+                                      
+                                        Row(children: [
+                                          Text(
+                                            "Wage/Day : ",
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          Text(
+                                            data[index]["Wages"],
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),Spacer(),PopupMenuButton<String>(
                                               iconColor: Colors.white,
                                               onSelected: (String result) {
                                                 print(
@@ -92,7 +122,7 @@ class Hosting_Girls_list extends StatelessWidget {
                                                       context,
                                                       MaterialPageRoute(
                                                           builder: (context) =>
-                                                              Catering_Editpage(
+                                                              EditHostibgGirls(
                                                                 docId:
                                                                     data[index]
                                                                         .id,
@@ -113,36 +143,6 @@ class Hosting_Girls_list extends StatelessWidget {
                                                 ),
                                               ],
                                             ),
-                                          ],
-                                        ),
-                                        Row(
-                                          children: [
-                                            Text(
-                                              "location : ",
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                            Text(
-                                              data[index]["location"],
-                                              style: TextStyle(
-                                                  color: Colors.white),
-                                            ),
-                                          ],
-                                        ),
-                                      
-                                        Row(children: [
-                                          Text(
-                                            "Banquet Wage/person : ",
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          Text(
-                                            data[index]["Banquet Wage/person"],
-                                            style:
-                                                TextStyle(color: Colors.white),
-                                          )
                                         ])
                                       ])))));
                 },

@@ -1,14 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evnt_shadow/provider/authentication/google_authentication.dart';
 import 'package:evnt_shadow/start/join.dart';
-import 'package:evnt_shadow/view/admin/widgets/main_widgets/catering.dart';
+import 'package:evnt_shadow/view/admin/widgets/main_widgets/Ideas.dart';
 import 'package:evnt_shadow/view/admin/widgets/main_widgets/dinning_set.dart';
 import 'package:evnt_shadow/view/admin/widgets/main_widgets/hosting_boys.dart';
 import 'package:evnt_shadow/view/admin/widgets/main_widgets/hosting_girls.dart';
+import 'package:evnt_shadow/view/admin/widgets/main_widgets/image_Catogary.dart';
 import 'package:evnt_shadow/view/admin/widgets/main_widgets/makeup.dart';
 import 'package:evnt_shadow/view/admin/widgets/main_widgets/mehandhi.dart';
 import 'package:evnt_shadow/view/admin/widgets/main_widgets/photography.dart';
 import 'package:evnt_shadow/view/admin/widgets/main_widgets/story.dart';
+import 'package:evnt_shadow/view/admin/widgets/main_widgets/vedio_Catogary.dart';
 import 'package:evnt_shadow/view/admin/widgets/main_widgets/veneue.dart';
 import 'package:evnt_shadow/view/admin/widgets/main_widgets/wedding_bokka.dart';
 import 'package:evnt_shadow/view/admin/widgets/main_widgets/wedding_cake.dart';
@@ -41,18 +43,15 @@ class _Admins_home_pageState extends State<Admins_home_page> {
             iconColor: Colors.white,
             onSelected: (String result) {
               print(result); // Handle your logic here
-              if (result == 'EditField') {
-                // Logic for edit button click
-                print('Edit button clicked');
-              } else if (result == 'DeleteField') {
+              if (result == 'DeleteField') {
                 // Logic for delete button click
                 FirebaseFirestore.instance.collection("CateringTeam");
                 print('Delete button clicked');
               } else if (result == 'Logout') {
                 // Logic for logout button click
-                Provider.of<AuthServies>(context, listen: false)
-                    .signOutWithGoogle()
-                    .then((lg) async {
+                Provider.of<AuthServies2>(context, listen: false)
+                    .signOutWithGoogle(context);
+                ((lg) async {
                   if (lg) {
                     showDialog(
                       context: context,
@@ -99,9 +98,10 @@ class _Admins_home_pageState extends State<Admins_home_page> {
 }
 
 List<Widget> homePageWidgets = [
-  Add_Story(),
-  // Manage_Catogary(),
-  Manage_Catering(),
+  Mannage_Story(),
+  Image_Catogary(),
+  Vedio_Catogary(),
+  Manage_Idea(),
   Manage_Dinnigset(),
   Manage_Photography(),
   Manage_Venue(),
@@ -113,4 +113,6 @@ List<Widget> homePageWidgets = [
   Manage_Mehandhi(),
   Manage_Car(),
   Manage_Card(),
+
+  // Manage_Catogary(),
 ];

@@ -1,10 +1,90 @@
+// ignore_for_file: must_be_immutable, unused_local_variable
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:evnt_shadow/view/admin/costom_widgets/textfield.dart';
 import 'package:flutter/material.dart';
 
 class EditVenue extends StatelessWidget {
-  const EditVenue({super.key});
-
+   EditVenue({super.key,required this.docId});
+ final String docId;
+  TextEditingController EditVenueNamecontroller = TextEditingController();
+    TextEditingController EditVenueLocationcontroller = TextEditingController();
+    TextEditingController EditVenueIndoorPricecontroller = TextEditingController();
+    TextEditingController EditVenueOutdoorPricecontroller = TextEditingController();
+    TextEditingController EditVenueBanquatePricecontroller = TextEditingController();
   
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(body: FutureBuilder(
+        future: FirebaseFirestore.instance
+            .collection("Venue")
+            .doc(docId)
+            .get(),
+        builder: (BuildContext context,
+            AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CircularProgressIndicator();
+          }
+
+          if (snapshot.hasData) {
+            EditVenueNamecontroller.text = snapshot.data!["Venue_Name"];
+            EditVenueLocationcontroller.text = snapshot.data!["Location"];
+            EditVenueIndoorPricecontroller.text = snapshot.data!["Indoor_Price"];
+             EditVenueOutdoorPricecontroller.text = snapshot.data!["Outdoor_Price"];
+              EditVenueBanquatePricecontroller.text = snapshot.data!["Banquet_Price"];
+            return SingleChildScrollView(
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 40,
+                  ),
+                  MyTextfield(
+                      hintText: 'Group Name',
+                      controller: EditVenueNamecontroller),
+                  MyTextfield(
+                      hintText: 'Location',
+                      controller: EditVenueLocationcontroller),
+                  MyTextfield(
+                      hintText: 'Indoor price',
+                      controller: EditVenueIndoorPricecontroller),
+                      MyTextfield(
+                      hintText: 'Outdoor price',
+                      controller: EditVenueOutdoorPricecontroller),
+                      MyTextfield(
+                      hintText: 'Bouquet price',
+                      controller: EditVenueBanquatePricecontroller),
+                  ElevatedButton(
+                      onPressed: () async {
+                        var teamData = {
+                          "Venue_Name": EditVenueNamecontroller.text,
+                          "Location": EditVenueLocationcontroller.text,
+                          "Indoor_Price": EditVenueIndoorPricecontroller.text,
+                          "Outdoor_Price": EditVenueOutdoorPricecontroller.text,
+                          "Banquet_Price": EditVenueBanquatePricecontroller.text,
+                        };
+                        var db_ref = await FirebaseFirestore.instance
+                            .collection("Venue")
+                            .doc(docId)
+                            .update(teamData);
+                        if (!context.mounted) return;
+                        Navigator.pop(context);
+                        
+                      },
+                      
+                      child: Text("Update"),
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all<Color>(Colors.green),
+                        foregroundColor:
+                            MaterialStateProperty.all<Color>(Colors.white),
+                      )),
+                ],
+              ),
+            );
+          } else {
+            return Text("no data to edit");
+          }
+        },
+      ),
+    );
   }
 }
